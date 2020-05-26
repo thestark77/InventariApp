@@ -2,9 +2,14 @@ const itemsList = document.getElementById("itemsList");
 const searchBar_PLU = document.getElementById("searchBar_PLU");
 const searchBar_NAME = document.getElementById("searchBar_NAME");
 let Items = [];
+let hacerIngreso = 'Entradas!A2';
+let hacerSalida = 'Salidas!A2';
+let producto_seleccionado;
+let cantidadArticulo = 3; //TODO: asignar campo de texto
+let usuarioEditor = "Username"; //TODO: asignar campo de texto
 
 
-async function makeApiCall() {
+async function readApiCall() {
   let params = {
     // The spreadsheet to request.
     spreadsheetId: '10jQrnFy8W7FkIpM1AGGsRTqRfC7odE_9xI8bmwpeRKM',  // TODO: Update placeholder value.
@@ -22,6 +27,33 @@ async function makeApiCall() {
     // TODO: Change code below to process the `response` object:
     Items = response.result.values; //This variable stores the JSON
     displayItems(Items);
+  }, function (reason) {
+    console.error('error: ' + reason.result.error.message);
+  });
+}
+
+function updateApiCall(action, data) {
+  var params = {
+    // The ID of the spreadsheet to update.
+    spreadsheetId: '10jQrnFy8W7FkIpM1AGGsRTqRfC7odE_9xI8bmwpeRKM',  // TODO: Update placeholder value.
+
+    // The A1 notation of a range to search for a logical table of data.
+    // Values will be appended after the last row of the table.
+    range: action,  // TODO: Update placeholder value.
+
+    // How the input data should be interpreted.
+    valueInputOption: 'USER_ENTERED',  // TODO: Update placeholder value.
+
+    // How the input data should be inserted.
+    insertDataOption: 'INSERT_ROWS',  // TODO: Update placeholder value.
+  };
+
+  var valueRangeBody = data;
+
+  var request = gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody);
+  request.then(function (response) {
+    // TODO: Change code below to process the `response` object:
+    console.log(response.result);
   }, function (reason) {
     console.error('error: ' + reason.result.error.message);
   });
@@ -56,13 +88,41 @@ function handleClientLoad() {
 }
 
 function updateSignInStatus(isSignedIn) {
-  makeApiCall();
+  readApiCall();
+}
+
+function handleSignInClick(event) {
+  gapi.auth2.getAuthInstance().signIn();
+}
+
+function ingreso(event) {
+  updateApiCall(hacerIngreso, producto_seleccionado);
+}
+
+function salida(event) {
+  updateApiCall(hacerSalida, producto_seleccionado);
 }
 
 
 
 //====================================================================================================
 
+function seleccionarProducto(plu, nombre) {
+  let hora = new Date();
+  producto_seleccionado = {
+    "values": [
+      [
+        "pepito777",
+        plu,
+        nombre,
+        cantidadArticulo,
+        hora
+      ]
+    ]
+  };
+
+  console.log(plu);
+}
 
 
 searchBar_PLU.addEventListener("keyup", (e) => {
@@ -88,9 +148,9 @@ const displayItems = (items) => {
   const htmlString = items
     .map((item) => {
       return `
-            <li class="item">
-                <h2>${item[0]}</h2>
-                <p>${item[1]}</p>
+            <li class="item" onclick="seleccionarProducto('${item[0]}', '${item[1]}')">
+                <h2>${ item[0] }</h2>
+                <p>${ item[1] }</p>
             </li>
         `;
     })
