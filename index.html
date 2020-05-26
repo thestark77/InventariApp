@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge" /> -->
+  <title>InventariApp</title>
+  <link rel="stylesheet" href="app.css" />
+</head>
+
+<body>
+  <div class="container">
+    <h1>Inventario</h1>
+    <div>
+      <h1>
+        Artículo seleccionado:
+      </h1>
+      <input type="text" name="addItem" id="addItem" placeholder="Nombre del producto" />
+    </div>
+    <div id="searchPlu">
+      <input type="text" name="searchBar_PLU" id="searchBar_PLU" placeholder="Buscar producto por PLU..." />
+    </div>
+    <div id="searchName">
+      <input type="text" name="searchBar_NAME" id="searchBar_NAME" placeholder="Buscar producto por NOMBRE..." />
+    </div>
+    <div></div>
+    <ul id="itemsList"></ul>
+  </div>
+  <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
+    onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+  <script src="app.js"></script>
+</body>
+</html>
