@@ -1,10 +1,13 @@
 const itemsList = document.getElementById("itemsList");
 const searchBar = document.getElementById("searchBar");
 const divProductoSeleccionado = document.getElementById("productoSeleccionado");
+const opcionesDeBusqueda = document.getElementById("opcionesDeBusqueda");
 
 let Items = [];
-let hacerIngreso = 'Entradas!A2';
-let hacerSalida = 'Salidas!A2';
+let filtereditems;
+let searchString;
+const hacerIngreso = 'Entradas!A2';
+const hacerSalida = 'Salidas!A2';
 let producto_seleccionado;
 let cantidadArticulo = 666; //TODO: asignar campo de texto
 let usuarioEditor = "Username"; //TODO: asignar campo de texto
@@ -165,27 +168,49 @@ function limpiar(){
 
 function criterioDeBusqueda(){
   const opcionesDeBusqueda = document.getElementById("opcionesDeBusqueda").value;
-  console.log(opcionesDeBusqueda);
   return opcionesDeBusqueda;
 }
 
-searchBar.addEventListener("keyup", (e) => {
+function filtrar (e){
   displayItems(Items);
   let buscarPor = criterioDeBusqueda();
-  console.log(buscarPor);
-  const searchString = e.target.value.toLowerCase();
-  let filtereditems;
+  searchString = e.target.value.toLowerCase();
+  
 
-  if (buscarPor == "nombre"){
+  if (buscarPor == "nombre") {
     filtereditems = Items.filter((item) => {
       return item[1].toLowerCase().includes(searchString);
     });
-  }else{
+  } else {
     filtereditems = Items.filter((item) => {
       return item[0].includes(searchString);
     });
   }
   displayItems(filtereditems);
+}
+
+function filterOptionChanged() {
+  displayItems(Items);
+  let buscarPor = criterioDeBusqueda();
+
+  if (buscarPor == "nombre") {
+    filtereditems = Items.filter((item) => {
+      return item[1].toLowerCase().includes(searchString);
+    });
+  } else {
+    filtereditems = Items.filter((item) => {
+      return item[0].includes(searchString);
+    });
+  }
+  displayItems(filtereditems);
+}
+
+opcionesDeBusqueda.addEventListener("change", (e) => {
+  filterOptionChanged();
+});
+
+searchBar.addEventListener("keyup", (e) => {
+  filtrar(e);
 });
 
 const displayItems = (items) => {
@@ -201,4 +226,3 @@ const displayItems = (items) => {
     .join("");
   itemsList.innerHTML = htmlString;
 };
-
