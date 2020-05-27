@@ -3,15 +3,16 @@ const searchBar = document.getElementById("searchBar");
 const divProductoSeleccionado = document.getElementById("productoSeleccionado");
 const opcionesDeBusqueda = document.getElementById("opcionesDeBusqueda");
 
+const limiteItemsEnPantalla = 30;
+const hacerIngreso = 'Entradas!A2';
+const hacerSalida = 'Salidas!A2';
+
 let Items = [];
 let filtereditems;
 let searchString;
-const hacerIngreso = 'Entradas!A2';
-const hacerSalida = 'Salidas!A2';
 let producto_seleccionado;
 let cantidadArticulo = 666; //TODO: asignar campo de texto
 let usuarioEditor = "Username"; //TODO: asignar campo de texto
-
 
 async function readApiCall() {
   let params = {
@@ -214,15 +215,31 @@ searchBar.addEventListener("keyup", (e) => {
 });
 
 const displayItems = (items) => {
-  const htmlString = items
-    .map((item) => {
-      return `
+  if (items.length > limiteItemsEnPantalla){
+    const firstItems = items.slice(0, limiteItemsEnPantalla);
+
+    const htmlString = firstItems
+      .map((item) => {
+        return `
             <li class="item" onclick="seleccionarProducto('${item[0]}', '${item[1]}')">
-                <h2>${ item[0] }</h2>
-                <p>${ item[1] }</p>
+                <h2>${ item[0]}</h2>
+                <p>${ item[1]}</p>
             </li>
         `;
-    })
-    .join("");
-  itemsList.innerHTML = htmlString;
+      })
+      .join("");
+    itemsList.innerHTML = htmlString;
+  } else{
+    const htmlString = items
+      .map((item) => {
+        return `
+            <li class="item" onclick="seleccionarProducto('${item[0]}', '${item[1]}')">
+                <h2>${ item[0]}</h2>
+                <p>${ item[1]}</p>
+            </li>
+        `;
+      })
+      .join("");
+    itemsList.innerHTML = htmlString;
+  }
 };
