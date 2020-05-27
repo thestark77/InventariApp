@@ -5,8 +5,9 @@ const divProductoSeleccionado = document.getElementById("productoSeleccionado");
 const opcionesDeBusqueda = document.getElementById("opcionesDeBusqueda");
 
 const limiteItemsEnPantalla = 30;
-const hacerIngreso = 'Entradas!A2';
-const hacerSalida = 'Salidas!A2';
+const rangoHojaProductos = 'B3:C3759';
+const hacerIngreso = 'Entradas!B6';
+const hacerSalida = 'Salidas!B6';
 
 let Items = [];
 let filtereditems;
@@ -21,7 +22,7 @@ async function readApiCall() {
     spreadsheetId: '10jQrnFy8W7FkIpM1AGGsRTqRfC7odE_9xI8bmwpeRKM',
 
     // The ranges to retrieve from the spreadsheet.
-    range: 'A2:B3758',  //'A2:B3758' real range
+    range: rangoHojaProductos,  //'A2:B3758' real range
 
     // True if grid data should be returned.
     // This parameter is ignored if a field mask was set in the request.
@@ -146,7 +147,8 @@ function salida() {  //TODO: crear comprobación para verificar que exista un pr
 function movimiento(tipo) {  //TODO: crear comprobación para verificar que exista un producto seleccionado y sino que saque una ventana emergente 
   cantidadArticulo = cantidadIngresada.value;
   if (cantidadArticulo > 0 && producto_seleccionado != null) {
-    let hora = new Date();
+    let hora = Date();
+    console.log(hora);
     let datos = {
       "values": [
         [
@@ -159,6 +161,7 @@ function movimiento(tipo) {  //TODO: crear comprobación para verificar que exis
       ]
     };
     updateApiCall(tipo, datos);
+    limpiar();
   } else { //TODO: Condicional para que cantidadArticulo sea mayor que 0
     console.log(cantidadArticulo);
     console.log(producto_seleccionado);
