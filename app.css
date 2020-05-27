@@ -41,6 +41,14 @@ h1 {
   text-align: left;
 }
 
+.no-seleccionable {
+  /* Hacer texto no seleccionable */
+  -moz-user-select: none; 
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none; 
+}
+
 .item > h2 {
   grid-area: plu;
   margin-bottom: 0px;
@@ -53,7 +61,7 @@ h1 {
   font-size: 1.2rem;
 }
 
-#searchBar_PLU {
+#searchBar { /*No sé qué le pasa a esta mierda pero no funciona*/
   width: 100%;
   height: 2rem;
   border-radius: 0.1875rem;
@@ -62,20 +70,11 @@ h1 {
   font-size: 0.875rem;
 }
 
-#searchBar_NAME {
-  width: 100%;
-  height: 2rem;
-  border-radius: 0.1875rem;
-  border: 0.0625rem solid #eaeaea;
-  padding: 0.3125rem 0.625rem;
-  font-size: 0.875rem;
-}
-
-#searchPlu {
+#searchContainer {
   position: relative;
 }
 
-#searchPlu::after {
+#searchContainer::after {
   content: "🔍";
   position: absolute;
   top: 0.4375rem;

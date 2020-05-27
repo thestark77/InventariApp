@@ -15,19 +15,29 @@
     <button id="signin-button" onclick="handleSignInClick()">Sign in</button>
     <button id="add-button" onclick="ingreso()">Entrada</button>
     <button id="remove-button" onclick="salida()">Salida</button>
-    <div>
       <h1>
         Artículo seleccionado:
       </h1>
-      <input type="text" name="addItem" id="addItem" placeholder="Nombre del producto" />
+    <div id="productoSeleccionado">
+      <div class="item">
+        <h2 class="no-seleccionable" style="opacity:0;">
+          .
+        </h2>
+        <p class="no-seleccionable" style="opacity:0;">
+          .
+        </p>
+      </div>
     </div>
-    <div id="searchPlu">
-      <input type="text" name="searchBar_PLU" id="searchBar_PLU" placeholder="Buscar producto por PLU..." />
+    <button id="limpiar" onclick="limpiar()">Limpiar</button>
+    <form>
+      <select name="opcionesDeBusqueda" id="opcionesDeBusqueda">
+        <option value="nombre">Nombre</option>
+        <option value="plu">Plu</option>
+      </select>
+    </form>
+    <div id="searchContainer">
+      <input type="text" name="searchBar" id="searchBar" placeholder="Buscar producto por..." />
     </div>
-    <div id="searchName">
-      <input type="text" name="searchBar_NAME" id="searchBar_NAME" placeholder="Buscar producto por NOMBRE..." />
-    </div>
-    <div></div>
     <ul id="itemsList"></ul>
   </div>
   <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"

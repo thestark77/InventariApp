@@ -1,21 +1,22 @@
 const itemsList = document.getElementById("itemsList");
-const searchBar_PLU = document.getElementById("searchBar_PLU");
-const searchBar_NAME = document.getElementById("searchBar_NAME");
+const searchBar = document.getElementById("searchBar");
+const divProductoSeleccionado = document.getElementById("productoSeleccionado");
+
 let Items = [];
 let hacerIngreso = 'Entradas!A2';
 let hacerSalida = 'Salidas!A2';
 let producto_seleccionado;
-let cantidadArticulo = 3; //TODO: asignar campo de texto
+let cantidadArticulo = 666; //TODO: asignar campo de texto
 let usuarioEditor = "Username"; //TODO: asignar campo de texto
 
 
 async function readApiCall() {
   let params = {
     // The spreadsheet to request.
-    spreadsheetId: '10jQrnFy8W7FkIpM1AGGsRTqRfC7odE_9xI8bmwpeRKM',  // TODO: Update placeholder value.
+    spreadsheetId: '10jQrnFy8W7FkIpM1AGGsRTqRfC7odE_9xI8bmwpeRKM',
 
     // The ranges to retrieve from the spreadsheet.
-    range: 'A2:B3758',  // TODO: Update placeholder value. 'A2:B3758' real range
+    range: 'A2:B3758',  //'A2:B3758' real range
 
     // True if grid data should be returned.
     // This parameter is ignored if a field mask was set in the request.
@@ -24,35 +25,33 @@ async function readApiCall() {
 
   let request = gapi.client.sheets.spreadsheets.values.get(params)
   request.then(function (response) {
-    // TODO: Change code below to process the `response` object:
     Items = response.result.values; //This variable stores the JSON
-    displayItems(Items);
+    displayItems(Items); //Start
   }, function (reason) {
     console.error('error: ' + reason.result.error.message);
   });
 }
 
-function updateApiCall(action, data) {
-  var params = {
+function updateApiCall(accion, datos) {
+  let params = {
     // The ID of the spreadsheet to update.
-    spreadsheetId: '10jQrnFy8W7FkIpM1AGGsRTqRfC7odE_9xI8bmwpeRKM',  // TODO: Update placeholder value.
+    spreadsheetId: '10jQrnFy8W7FkIpM1AGGsRTqRfC7odE_9xI8bmwpeRKM',
 
     // The A1 notation of a range to search for a logical table of data.
     // Values will be appended after the last row of the table.
-    range: action,  // TODO: Update placeholder value.
+    range: accion,
 
     // How the input data should be interpreted.
-    valueInputOption: 'USER_ENTERED',  // TODO: Update placeholder value.
+    valueInputOption: 'USER_ENTERED',
 
     // How the input data should be inserted.
-    insertDataOption: 'INSERT_ROWS',  // TODO: Update placeholder value.
+    insertDataOption: 'INSERT_ROWS',
   };
 
-  var valueRangeBody = data;
+  let valueRangeBody = datos;
 
-  var request = gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody);
+  let request = gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody);
   request.then(function (response) {
-    // TODO: Change code below to process the `response` object:
     console.log(response.result);
   }, function (reason) {
     console.error('error: ' + reason.result.error.message);
@@ -60,17 +59,17 @@ function updateApiCall(action, data) {
 }
 
 function initClient() {
-  var API_KEY = 'AIzaSyAsP0ndw71kxf6olT7Pc-UVJv11MR8t6pc';  // TODO: Update placeholder with desired API key.
+  let API_KEY = 'AIzaSyAsP0ndw71kxf6olT7Pc-UVJv11MR8t6pc';
 
-  var CLIENT_ID = '392467592952-o5rb6rt619tu3nab74mij029kca7t7pn.apps.googleusercontent.com';  // TODO: Update placeholder with desired client ID.
+  let CLIENT_ID = '392467592952-o5rb6rt619tu3nab74mij029kca7t7pn.apps.googleusercontent.com';
 
-  // TODO: Authorize using one of the following scopes:
+  // Authorize using one of the following scopes:
   //   'https://www.googleapis.com/auth/drive'
   //   'https://www.googleapis.com/auth/drive.file'
   //   'https://www.googleapis.com/auth/drive.readonly'
   //   'https://www.googleapis.com/auth/spreadsheets'
   //   'https://www.googleapis.com/auth/spreadsheets.readonly'
-  var SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
+  let SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
 
   gapi.client.init({
     'apiKey': API_KEY,
@@ -95,12 +94,36 @@ function handleSignInClick(event) {
   gapi.auth2.getAuthInstance().signIn();
 }
 
-function ingreso(event) {
-  updateApiCall(hacerIngreso, producto_seleccionado);
+function ingreso() {  //TODO: crear comprobación para verificar que exista un producto seleccionado y sino que saque una ventana emergente
+  let hora = new Date();
+  let datos = {
+    "values": [
+      [
+        usuarioEditor,
+        producto_seleccionado[0],
+        producto_seleccionado[1],
+        cantidadArticulo,
+        hora
+      ]
+    ]
+  };
+  updateApiCall(hacerIngreso, datos);
 }
 
-function salida(event) {
-  updateApiCall(hacerSalida, producto_seleccionado);
+function salida() {  //TODO: crear comprobación para verificar que exista un producto seleccionado y sino que saque una ventana emergente
+  let hora = new Date();
+  let datos = {
+    "values": [
+      [
+        usuarioEditor,
+        producto_seleccionado[0],
+        producto_seleccionado[1],
+        cantidadArticulo,
+        hora
+      ]
+    ]
+  };
+  updateApiCall(hacerSalida, datos);
 }
 
 
@@ -108,39 +131,60 @@ function salida(event) {
 //====================================================================================================
 
 function seleccionarProducto(plu, nombre) {
-  let hora = new Date();
-  producto_seleccionado = {
-    "values": [
-      [
-        "pepito777",
-        plu,
-        nombre,
-        cantidadArticulo,
-        hora
-      ]
-    ]
-  };
-
-  console.log(plu);
+  producto_seleccionado = [plu, nombre];
+  actualizarSeleccionado();
 }
 
+function actualizarSeleccionado(){
+  const htmlString = `
+    <div class="item">
+      <h2 class="no-seleccionable">
+        ${producto_seleccionado[0]}
+      </h2>
+      <p>
+        ${producto_seleccionado[1]}
+      </p>
+    </div>
+  `;
+  divProductoSeleccionado.innerHTML = htmlString;
+}
 
-searchBar_PLU.addEventListener("keyup", (e) => {
+function limpiar(){
+  const htmlString = `
+    <div class="item">
+      <h2 class="no-seleccionable" style="opacity:0;">
+        .
+      </h2>
+      <p class="no-seleccionable" style="opacity:0;">
+        .
+      </p>
+    </div>
+  `;
+  divProductoSeleccionado.innerHTML = htmlString;
+}
+
+function criterioDeBusqueda(){
+  const opcionesDeBusqueda = document.getElementById("opcionesDeBusqueda").value;
+  console.log(opcionesDeBusqueda);
+  return opcionesDeBusqueda;
+}
+
+searchBar.addEventListener("keyup", (e) => {
   displayItems(Items);
+  let buscarPor = criterioDeBusqueda();
+  console.log(buscarPor);
   const searchString = e.target.value.toLowerCase();
+  let filtereditems;
 
-  const filtereditems = Items.filter((item) => {
-    return item[0].includes(searchString);
-  });
-  displayItems(filtereditems);
-});
-
-searchBar_NAME.addEventListener("keyup", (e) => {
-  const searchString = e.target.value.toLowerCase();
-
-  const filtereditems = Items.filter((item) => {
-    return item[1].toLowerCase().includes(searchString);
-  });
+  if (buscarPor == "nombre"){
+    filtereditems = Items.filter((item) => {
+      return item[1].toLowerCase().includes(searchString);
+    });
+  }else{
+    filtereditems = Items.filter((item) => {
+      return item[0].includes(searchString);
+    });
+  }
   displayItems(filtereditems);
 });
 
@@ -157,3 +201,4 @@ const displayItems = (items) => {
     .join("");
   itemsList.innerHTML = htmlString;
 };
+
