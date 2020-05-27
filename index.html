@@ -13,8 +13,8 @@
   <div class="container">
     <h1>Inventario</h1>
     <button id="signin-button" onclick="handleSignInClick()">Sign in</button>
-    <button id="add-button" onclick="ingreso()">Entrada</button>
-    <button id="remove-button" onclick="salida()">Salida</button>
+    <button id="add-button" onclick="movimiento(hacerIngreso)">Entrada</button>
+    <button id="remove-button" onclick="movimiento(hacerSalida)">Salida</button>
       <h1>
         Artículo seleccionado:
       </h1>
@@ -28,6 +28,7 @@
         </p>
       </div>
     </div>
+    <input type="number" name="cantidadIngresada" id="cantidadIngresada" placeholder="0" />
     <button id="limpiar" onclick="limpiar()">Limpiar</button>
     <form>
       <select name="opcionesDeBusqueda" id="opcionesDeBusqueda">
