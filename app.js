@@ -100,7 +100,7 @@ function handleSignInClick(event) {
   gapi.auth2.getAuthInstance().signIn();
 }
 
-function ingreso() {  //TODO: crear comprobación para verificar que exista un producto seleccionado y sino que saque una ventana emergente 
+function ingreso() {
   cantidadArticulo = cantidadIngresada.value;
   if (cantidadArticulo > 0 && producto_seleccionado != null){
     let hora = new Date();
@@ -117,7 +117,7 @@ function ingreso() {  //TODO: crear comprobación para verificar que exista un p
     };
     updateApiCall(hacerIngreso, datos);
   } else { //TODO: Condicional para que cantidadArticulo sea mayor que 0
-    console.log(cantidadArticulo);
+    console.log(cantidadArticulo); //TODO: crear comprobación para verificar que exista un producto seleccionado y sino que saque una ventana emergente 
     console.log(producto_seleccionado);
   }
 }
@@ -148,7 +148,7 @@ function movimiento(tipo) {  //TODO: crear comprobación para verificar que exis
   cantidadArticulo = cantidadIngresada.value;
   if (cantidadArticulo > 0 && producto_seleccionado != null) {
     let hora = Date();
-    console.log(hora);
+    console.log(hora); //TODO: Limpiar
     let datos = {
       "values": [
         [
