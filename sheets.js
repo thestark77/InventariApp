@@ -1,27 +1,26 @@
+/*====================================================================================================
+                                        CONSTANTS
+======================================================================================================*/
 const { google } = require('googleapis');
 const keys = require('./keys.json');
+const client = new google.auth.JWT(keys.client_email, null, keys.private_key, ['https://www.googleapis.com/auth/spreadsheets']);
+const gsapi = google.sheets({ version: 'v4', auth: client });
+const RangeProducts = 'B3:C3759'; //Products table
 
-const RangeProducts = 'B3:C3759';
-
+//USEFUL LINKS
 //https://nodejs.org/es/
 //https://developers.google.com/sheets/api/quickstart/nodejs
 //console.developers.google.com
 
-const client = new google.auth.JWT(
-    keys.client_email,
-    null,
-    keys.private_key, 
-    ['https://www.googleapis.com/auth/spreadsheets']
-);
-
-client.authorize(function (err,tokens) {
+/*====================================================================================================
+                                GOOGLE SHEET CONNECTION FUNCTIONS
+======================================================================================================*/
+client.authorize(function (err, tokens) {
     if (err) {
         console.log(err);
         return;
     }
 });
-
-const gsapi = google.sheets({ version: 'v4', auth: client });
 
 async function read(){
     const readOptions = { //Options needed only for READING
@@ -66,5 +65,17 @@ async function update(action, data) {
 exports.read = read;
 exports.update = update;
 
-read();
-update('Entradas!B6', datos);
+/* read(); //TODO: Test
+
+let datos = {
+    "values": [
+        [
+            "usu123313arioEditor",
+            "producto_seleccionado[0]",
+            "producto_seleccionado[1]",
+            "cantidadArticulo",
+            "hora"
+        ]
+    ]
+};
+update('Entradas!B6', datos); */

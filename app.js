@@ -1,22 +1,29 @@
+/*====================================================================================================
+                                CONSTANTES HTML
+======================================================================================================*/
 const itemsList = document.getElementById("itemsList");
 const searchBar = document.getElementById("searchBar");
 const cantidadIngresada = document.getElementById("cantidadIngresada");
 const divProductoSeleccionado = document.getElementById("productoSeleccionado");
 const opcionesDeBusqueda = document.getElementById("opcionesDeBusqueda");
 
+/*====================================================================================================
+                                CONSTANTES HTML
+======================================================================================================*/
 const limiteItemsEnPantalla = 30;
 const rangoHojaProductos = 'B3:C3759';
 const hacerIngreso = 'Entradas!B6';
 const hacerSalida = 'Salidas!B6';
 
 let Items = [];
+let usuarioEditor = "Username"; //TODO: asignar campo de texto TODO: Eliminar las variables globales
 let filtereditems;
 let searchString;
 let producto_seleccionado = null;
-let cantidadArticulo = 666; //TODO: asignar campo de texto 
-let usuarioEditor = "Username"; //TODO: asignar campo de texto
+let cantidadArticulo = 0; //TODO: asignar campo de texto 
 
-async function readApiCall() {
+
+/* async function readApiCall() {
   let params = {
     // The spreadsheet to request.
     spreadsheetId: '10jQrnFy8W7FkIpM1AGGsRTqRfC7odE_9xI8bmwpeRKM',
@@ -98,51 +105,11 @@ function updateSignInStatus(isSignedIn) {
 
 function handleSignInClick(event) {
   gapi.auth2.getAuthInstance().signIn();
-}
+} */
 
-function ingreso() {
-  cantidadArticulo = cantidadIngresada.value;
-  if (cantidadArticulo > 0 && producto_seleccionado != null){
-    let hora = new Date();
-    let datos = {
-      "values": [
-        [
-          usuarioEditor,
-          producto_seleccionado[0],
-          producto_seleccionado[1],
-          cantidadArticulo,
-          hora
-        ]
-      ]
-    };
-    updateApiCall(hacerIngreso, datos);
-  } else { //TODO: Condicional para que cantidadArticulo sea mayor que 0
-    console.log(cantidadArticulo); //TODO: crear comprobación para verificar que exista un producto seleccionado y sino que saque una ventana emergente 
-    console.log(producto_seleccionado);
-  }
-}
-
-function salida() {  //TODO: crear comprobación para verificar que exista un producto seleccionado y sino que saque una ventana emergente 
-  cantidadArticulo = cantidadIngresada.value;
-  if (cantidadArticulo > 0 && producto_seleccionado != null) {
-    let hora = new Date();
-    let datos = {
-      "values": [
-        [
-          usuarioEditor,
-          producto_seleccionado[0],
-          producto_seleccionado[1],
-          cantidadArticulo,
-          hora
-        ]
-      ]
-    };
-    updateApiCall(hacerSalida, datos);
-  } else { //TODO: Condicional para que cantidadArticulo sea mayor que 0
-    console.log(cantidadArticulo);
-    console.log(producto_seleccionado);
-  }
-}
+/*====================================================================================================
+                                FUNCIONES DE GESTIÓN DE PRODUCTOS
+======================================================================================================*/
 
 function movimiento(tipo) {  //TODO: crear comprobación para verificar que exista un producto seleccionado y sino que saque una ventana emergente 
   cantidadArticulo = cantidadIngresada.value;
@@ -167,12 +134,6 @@ function movimiento(tipo) {  //TODO: crear comprobación para verificar que exis
     console.log(producto_seleccionado);
   }
 }
-
-
-
-//====================================================================================================
-
-
 
 function seleccionarProducto(plu, nombre) {
   producto_seleccionado = [plu, nombre];
@@ -212,6 +173,11 @@ function limpiar(){
   divProductoSeleccionado.innerHTML = htmlString;
 }
 
+/*====================================================================================================
+                                    FUNCIONES DE BUSCADOR
+======================================================================================================*/
+
+
 function criterioDeBusqueda(){
   const opcionesDeBusqueda = document.getElementById("opcionesDeBusqueda").value;
   return opcionesDeBusqueda;
@@ -235,7 +201,7 @@ function filtrar (e){
   displayItems(filtereditems);
 }
 
-function filterOptionChanged() {
+function filtroCambiado() {
   if (searchBar.value != ""){
     let buscarPor = criterioDeBusqueda();
     if (buscarPor == "nombre") {
@@ -252,7 +218,7 @@ function filterOptionChanged() {
 }
 
 opcionesDeBusqueda.addEventListener("change", (e) => {
-  filterOptionChanged();
+  filtroCambiado();
 });
 
 searchBar.addEventListener("keyup", (e) => {
