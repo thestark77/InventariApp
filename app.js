@@ -14,10 +14,8 @@ const limiteItemsEnPantalla = 30;
 const rangoHojaProductos = 'B3:C3759';
 const hacerIngreso = 'Entradas!B6';
 const hacerSalida = 'Salidas!B6';
-const hoja = require('./sheets.js');
 
-let Items = hoja.read;
-console.log(Items);
+let Items = [];
 let usuarioEditor = "Username"; //TODO: asignar campo de texto TODO: Eliminar las variables globales
 let filtereditems;
 let searchString;
@@ -25,7 +23,7 @@ let producto_seleccionado = null;
 let cantidadArticulo = 0; //TODO: asignar campo de texto 
 
 
-/* async function readApiCall() {
+async function readApiCall() {
   let params = {
     // The spreadsheet to request.
     spreadsheetId: '10jQrnFy8W7FkIpM1AGGsRTqRfC7odE_9xI8bmwpeRKM',
@@ -107,7 +105,7 @@ function updateSignInStatus(isSignedIn) {
 
 function handleSignInClick(event) {
   gapi.auth2.getAuthInstance().signIn();
-} */
+}
 
 /*====================================================================================================
                                 FUNCIONES DE GESTIÓN DE PRODUCTOS
