@@ -8,14 +8,16 @@ const divProductoSeleccionado = document.getElementById("productoSeleccionado");
 const opcionesDeBusqueda = document.getElementById("opcionesDeBusqueda");
 
 /*====================================================================================================
-                                CONSTANTES HTML
+                              CONSTANTES DE LA APP
 ======================================================================================================*/
 const limiteItemsEnPantalla = 30;
 const rangoHojaProductos = 'B3:C3759';
 const hacerIngreso = 'Entradas!B6';
 const hacerSalida = 'Salidas!B6';
+const hoja = require('./sheets.js');
 
-let Items = [];
+let Items = hoja.read;
+console.log(Items);
 let usuarioEditor = "Username"; //TODO: asignar campo de texto TODO: Eliminar las variables globales
 let filtereditems;
 let searchString;
