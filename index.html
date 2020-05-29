@@ -6,30 +6,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge" /> -->
   <title>InventariApp</title>
-  <link rel="stylesheet" href="app.css" />
+  <link rel="stylesheet" href="style.css"/>
 </head>
 
 <body>
   <div class="container">
     <h1>Inventario</h1>
     <!-- <button id="signin-button" onclick="handleSignInClick()">Sign in</button> -->
-    <button id="add-button" onclick="movimiento(hacerIngreso)">Entrada</button>
-    <button id="remove-button" onclick="movimiento(hacerSalida)">Salida</button>
+    <button id="addButton">Entrada</button>
+    <button id="removeButton">Salida</button>
       <h1>
         Artículo seleccionado:
       </h1>
     <div id="productoSeleccionado">
-      <div class="item">
-        <h2 class="no-seleccionable" style="opacity:0;">
+      <div class="primerItem">
+        <h2 class="no-seleccionable">
           .
         </h2>
-        <p class="no-seleccionable" style="opacity:0;">
+        <p class="no-seleccionable">
           .
         </p>
       </div>
     </div>
     <input type="number" name="cantidadIngresada" id="cantidadIngresada" placeholder="0" />
-    <button id="limpiar" onclick="limpiar()">Limpiar</button>
+    <button id="cleanButton">Limpiar</button>
     <form>
       <select name="opcionesDeBusqueda" id="opcionesDeBusqueda">
         <option value="nombre">Nombre</option>
@@ -38,6 +38,7 @@
     </form>
     <div id="searchContainer">
       <input type="text" name="searchBar" id="searchBar" placeholder="Buscar producto por..." />
+      <button id="cleanSearchBar">X</button>
     </div>
     <ul id="itemsList"></ul>
   </div>

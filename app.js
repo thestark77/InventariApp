@@ -6,6 +6,10 @@ const searchBar = document.getElementById("searchBar");
 const cantidadIngresada = document.getElementById("cantidadIngresada");
 const divProductoSeleccionado = document.getElementById("productoSeleccionado");
 const opcionesDeBusqueda = document.getElementById("opcionesDeBusqueda");
+const addButton = document.getElementById("addButton");
+const removeButton = document.getElementById("removeButton");
+const cleanButton = document.getElementById("cleanButton");
+const cleanSearchBar = document.getElementById("cleanSearchBar");
 
 /*====================================================================================================
                               CONSTANTES DE LA APP
@@ -15,12 +19,9 @@ const rangoHojaProductos = 'B3:C3759';
 const hacerIngreso = 'Entradas!B6';
 const hacerSalida = 'Salidas!B6';
 
+let usuarioEditor = "Username"; //TODO: asignar campo de texto importado desde el log in... cuando lo haga :v ¿Constante o variable?... creo que constante
 let Items = [];
-let usuarioEditor = "Username"; //TODO: asignar campo de texto TODO: Eliminar las variables globales
-let filtereditems;
-let searchString;
-let producto_seleccionado = null;
-let cantidadArticulo = 0; //TODO: asignar campo de texto 
+let productoSeleccionado = null;
 
 
 async function readApiCall() {
@@ -65,9 +66,9 @@ function updateApiCall(accion, datos) {
 
   let request = gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody);
   request.then(function (response) {
-    //console.log(response.result);
+    console.log(response.result); //TODO: Mensaje de "producto ingresado" en una ventana modal
   }, function (reason) {
-    console.error('error: ' + reason.result.error.message);
+      console.error('error: ' + reason.result.error.message); //TODO: Mensaje de error en una ventana modal
   });
 }
 
@@ -112,16 +113,15 @@ function handleSignInClick(event) {
 ======================================================================================================*/
 
 function movimiento(tipo) {  //TODO: crear comprobación para verificar que exista un producto seleccionado y sino que saque una ventana emergente 
-  cantidadArticulo = cantidadIngresada.value;
-  if (cantidadArticulo > 0 && producto_seleccionado != null) {
+  cantidadArticulo = cantidadDigitada();
+  if (cantidadArticulo != "" && productoSeleccionado != null) {
     let hora = Date();
-    console.log(hora); //TODO: Limpiar
     let datos = {
       "values": [
         [
           usuarioEditor,
-          producto_seleccionado[0],
-          producto_seleccionado[1],
+          productoSeleccionado[0],
+          productoSeleccionado[1],
           cantidadArticulo,
           hora
         ]
@@ -129,37 +129,67 @@ function movimiento(tipo) {  //TODO: crear comprobación para verificar que exis
     };
     updateApiCall(tipo, datos);
     limpiar();
-  } else { //TODO: Condicional para que cantidadArticulo sea mayor que 0
-    console.log(cantidadArticulo);
-    console.log(producto_seleccionado);
+  } else { //TODO: Si no se ha seleccionado el producto o no se ha ingresado la cantidad, resaltar el cuadro respectivo
+    if (productoSeleccionado == null && cantidadArticulo == ""){
+      console.log("Seleccione un producto y digite la cantidad");
+    } else if (productoSeleccionado == null){
+      console.log("Seleccione un producto");
+    } else if (cantidadArticulo == "") {
+      console.log("Digite la cantidad");
+    }else{
+      console.log("Error desconocido");
+    }
   }
 }
 
 function seleccionarProducto(plu, nombre) {
-  producto_seleccionado = [plu, nombre];
-  cantidadArticulo = 0;
-  cantidadIngresada.value = "";
-  actualizarSeleccionado();
+  const productoClicado = document.getElementById(plu);
+
+  if (productoSeleccionado != null) {
+    if (productoSeleccionado[0] != plu) {
+      const itemAnteriorSeleccionado = document.getElementById(productoSeleccionado[0]);
+      if (itemAnteriorSeleccionado != null) {
+        itemAnteriorSeleccionado.className = "item";
+      }
+      productoClicado.className = "itemSeleccionado";
+      productoSeleccionado = [plu, nombre];
+      actualizarSeleccionado([plu, nombre]);
+      limpiarCantidadDigitada();
+    }
+  } else {
+    productoClicado.className = "itemSeleccionado";
+    productoSeleccionado = [plu, nombre];
+    actualizarSeleccionado([plu, nombre]);
+    limpiarCantidadDigitada();
+  }
 }
 
-function actualizarSeleccionado(){
+function actualizarSeleccionado(producto) {
   const htmlString = `
-    <div class="item">
-      <h2 class="no-seleccionable">
-        ${producto_seleccionado[0]}
+    <div class="primerItem">
+      <h2>
+        ${producto[0]}
       </h2>
       <p>
-        ${producto_seleccionado[1]}
+        ${producto[1]}
       </p>
     </div>
   `;
   divProductoSeleccionado.innerHTML = htmlString;
 }
 
-function limpiar(){
-  producto_seleccionado = null;
-  cantidadArticulo = 0;
-  cantidadIngresada.value = "";
+function limpiar() {
+  limpiarCantidadDigitada();
+
+  if (productoSeleccionado != null) {
+    const producto = document.getElementById(productoSeleccionado[0]);
+    if (producto != null) {
+      producto.className = "item";
+    }
+  }
+
+  productoSeleccionado = null;
+
   const htmlString = `
     <div class="item">
       <h2 class="no-seleccionable" style="opacity:0;">
@@ -173,49 +203,104 @@ function limpiar(){
   divProductoSeleccionado.innerHTML = htmlString;
 }
 
+function cantidadDigitada(){
+  return cantidadIngresada.value; //TODO:
+}
+
+function limpiarCantidadDigitada(){
+  cantidadIngresada.value = "";
+}
+
+function limpiarBarraBusqueda(){
+  searchBar.value = "";
+}
+
 /*====================================================================================================
                                     FUNCIONES DE BUSCADOR
 ======================================================================================================*/
 
+function buscar(texto) {
+  let buscarPor = criterioDeBusqueda();
+  let itemsFiltrados;
+  let textoABuscar;
+
+  if (texto == undefined) {
+    textoABuscar = searchBar.value;
+  } else {
+    textoABuscar = texto;
+  }
+
+  if (buscarPor == "nombre") {
+    itemsFiltrados = Items.filter((item) => {
+      return item[1].toLowerCase().includes(textoABuscar);
+    });
+  } else {
+    itemsFiltrados = Items.filter((item) => {
+      return item[0].includes(textoABuscar);
+    });
+  }
+  displayItems(itemsFiltrados);
+}
+
+function filtrar(e) {
+  displayItems(Items);
+  textoABuscar = e.target.value.toLowerCase();
+  buscar(textoABuscar);
+}
 
 function criterioDeBusqueda(){
   const opcionesDeBusqueda = document.getElementById("opcionesDeBusqueda").value;
   return opcionesDeBusqueda;
 }
 
-function filtrar (e){
-  displayItems(Items);
-  let buscarPor = criterioDeBusqueda();
-  searchString = e.target.value.toLowerCase();
-  
-
-  if (buscarPor == "nombre") {
-    filtereditems = Items.filter((item) => {
-      return item[1].toLowerCase().includes(searchString);
-    });
-  } else {
-    filtereditems = Items.filter((item) => {
-      return item[0].includes(searchString);
-    });
-  }
-  displayItems(filtereditems);
-}
-
 function filtroCambiado() {
   if (searchBar.value != ""){
-    let buscarPor = criterioDeBusqueda();
-    if (buscarPor == "nombre") {
-      filtereditems = Items.filter((item) => {
-        return item[1].toLowerCase().includes(searchString);
-      });
-    } else {
-      filtereditems = Items.filter((item) => {
-        return item[0].includes(searchString);
-      });
-    }
-    displayItems(filtereditems);
+    buscar();
   }
 }
+
+const displayItems = (items) => {
+
+  if (items.length > limiteItemsEnPantalla) {
+    const firstItems = items.slice(0, limiteItemsEnPantalla);
+    
+    const htmlString = firstItems
+      .map((item) => {
+        return `
+            <li id="${ item[0]}" class="item" onclick="seleccionarProducto('${item[0]}', '${item[1]}')">
+                <h2>${ item[0] }</h2>
+                <p>${ item[1] }</p>
+            </li>
+        `;
+      })
+      .join("");
+    itemsList.innerHTML = htmlString;
+  } else {
+    const htmlString = items
+      .map((item) => {
+        return `
+            <li id="${ item[0]}" class="item" onclick="seleccionarProducto('${item[0]}', '${item[1]}')">
+                <h2>${ item[0]}</h2>
+                <p>${ item[1]}</p>
+            </li>
+        `;
+      })
+      .join("");
+    itemsList.innerHTML = htmlString;
+  }
+  
+  if(productoSeleccionado != null){
+    const selectedItem = document.getElementById(productoSeleccionado[0]);
+
+    if (selectedItem != null) {
+      selectedItem.className = "itemSeleccionado";
+    }
+  }
+};
+
+/*====================================================================================================
+                                        EVENTOS
+======================================================================================================*/
 
 opcionesDeBusqueda.addEventListener("change", (e) => {
   filtroCambiado();
@@ -225,32 +310,21 @@ searchBar.addEventListener("keyup", (e) => {
   filtrar(e);
 });
 
-const displayItems = (items) => {
-  if (items.length > limiteItemsEnPantalla){
-    const firstItems = items.slice(0, limiteItemsEnPantalla);
+addButton.addEventListener("click", (e) => {
+  movimiento(hacerIngreso);
+})
 
-    const htmlString = firstItems
-      .map((item) => {
-        return `
-            <li class="item" onclick="seleccionarProducto('${item[0]}', '${item[1]}')">
-                <h2>${ item[0]}</h2>
-                <p>${ item[1]}</p>
-            </li>
-        `;
-      })
-      .join("");
-    itemsList.innerHTML = htmlString;
-  } else{
-    const htmlString = items
-      .map((item) => {
-        return `
-            <li class="item" onclick="seleccionarProducto('${item[0]}', '${item[1]}')">
-                <h2>${ item[0]}</h2>
-                <p>${ item[1]}</p>
-            </li>
-        `;
-      })
-      .join("");
-    itemsList.innerHTML = htmlString;
+removeButton.addEventListener("click", (e) => {
+  movimiento(hacerSalida)
+})
+
+cleanButton.addEventListener("click", (e) => {
+  limpiar();
+})
+
+cleanSearchBar.addEventListener("click", (e) => {
+  if (searchBar != ""){
+    limpiarBarraBusqueda();
+    displayItems(Items);
   }
-};
+})

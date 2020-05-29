@@ -14,6 +14,29 @@ h1 {
   margin-bottom: 30px;
   font-size: 1rem;
 }
+
+h2 {
+  grid-area: plu;
+  margin-bottom: 0px;
+  font-size: 1.5rem;
+  /* Hacer texto no seleccionable */
+  -moz-user-select: none; 
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+p {
+  grid-area: name;
+  margin: 0;
+  font-size: 1.2rem;
+  /* Hacer texto no seleccionable */
+  -moz-user-select: none; 
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .container {
   padding: 2.5rem;
   max-width: 62.5rem;
@@ -39,6 +62,34 @@ h1 {
     "name img"
     "houses img";
   text-align: left;
+  
+}
+
+.primerItem {
+  list-style-type: none;
+  background-color: #59bdf7;
+  border-radius: 0.1875rem;
+  padding: 0.625rem 1.25rem;
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  grid-template-areas:
+    "name img"
+    "houses img";
+  text-align: left;
+  
+}
+
+.itemSeleccionado {
+  list-style-type: none;
+  background-color: #c89fff;
+  border-radius: 0.1875rem;
+  padding: 0.625rem 1.25rem;
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  grid-template-areas:
+    "name img"
+    "houses img";
+  text-align: left;
 }
 
 .no-seleccionable {
@@ -46,19 +97,8 @@ h1 {
   -moz-user-select: none; 
   -webkit-user-select: none;
   -ms-user-select: none;
-  user-select: none; 
-}
-
-.item > h2 {
-  grid-area: plu;
-  margin-bottom: 0px;
-  font-size: 1.5rem;
-}
-
-.item > p {
-  grid-area: name;
-  margin: 0;
-  font-size: 1.2rem;
+  user-select: none;
+  opacity:0;
 }
 
 #searchBar { /*No sé qué le pasa a esta mierda pero no funciona*/
@@ -75,17 +115,6 @@ h1 {
 }
 
 #searchContainer::after {
-  content: "🔍";
-  position: absolute;
-  top: 0.4375rem;
-  right: 0.9375rem;
-}
-
-#searchName {
-  position: relative;
-}
-
-#searchName::after {
   content: "🔍";
   position: absolute;
   top: 0.4375rem;
