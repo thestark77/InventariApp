@@ -2,7 +2,12 @@
                                   IMPORTS
 ======================================================================================================*/
 import './main.scss';
+import {router} from './router/index.routes';
 
+
+window.addEventListener('hashchange', () => {
+  router(window.location.hash);
+});
 
 
 
@@ -18,7 +23,6 @@ const addButton = document.getElementById("addButton");
 const removeButton = document.getElementById("removeButton");
 const cleanButton = document.getElementById("cleanButton");
 const cleanSearchBar = document.getElementById("cleanSearchBar");
-
 /*====================================================================================================
                               CONSTANTES DE LA APP
 ======================================================================================================*/
@@ -28,7 +32,7 @@ const hacerIngreso = 'Entradas!B6';
 const hacerSalida = 'Salidas!B6';
 
 let usuarioEditor = "Username"; //TODO: asignar campo de texto importado desde el log in... cuando lo haga :v ¿Constante o variable?... creo que constante
-let Items = [];
+let Items;
 let productoSeleccionado = null;
 
 
