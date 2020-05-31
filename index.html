@@ -1,71 +1,102 @@
 <!DOCTYPE html>
 <html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- <meta http-equiv="X-UA-Compatible" content="ie=edge" /> -->
+		<title>InventariApp</title>
+		<!--Import Google Icon Font-->
+		<link
+			href="https://fonts.googleapis.com/icon?family=Material+Icons"
+			rel="stylesheet"
+		/>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge" /> -->
-  <title>InventariApp</title>
-  <!--Import Google Icon Font-->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<!-- Compiled and minified CSS -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+		/>
+		<!-- <link rel="stylesheet" href="main.css" /> -->
+	</head>
 
-  <!-- Compiled and minified CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <!-- <link rel="stylesheet" href="style.css"/> -->
-</head>
+	<body>
+		<nav>
+			<ul>
+				<li>
+					<a href="#/entradas">Entradas</a>
+				</li>
+				<li>
+					<a href="#/salidas">Salidas</a>
+				</li>
+				<li>
+					<a href="#/movimientos">Movimientos</a>
+				</li>
+			</ul>
+		</nav>
 
-<body>
-  <nav>
-    <ul>
-      <li>
-        <a href="#/entradas">Entradas</a>
-      </li>
-      <li>
-        <a href="#/salidas">Salidas</a>
-      </li>
-      <li>
-        <a href="#/movimientos">Movimientos</a>
-      </li>
-    </ul>
-  </nav>
+		<div class="input-field col s12">
+				<select  name="opcionesDeBusqueda" id="opcionesDeBusqueda">
+					<option value="nombre">Nombre</option>
+					<option value="plu">Plu</option>
+				</select>
+				<label>Materialize Select</label>
+			</div>
 
-  <div class="container">
-    <h1>Inventario</h1>
-    <!-- <button id="signin-button" onclick="handleSignInClick()">Sign in</button> -->
-    <button id="addButton">Entrada</button>
-    <button id="removeButton">Salida</button>
-      <h1>
-        Artículo seleccionado:
-      </h1>
-    <div id="productoSeleccionado">
-      <div class="primerItem">
-        <h2 class="no-seleccionable">
-          .
-        </h2>
-        <p class="no-seleccionable">
-          .
-        </p>
-      </div>
-    </div>
-    <input type="number" name="cantidadIngresada" id="cantidadIngresada" placeholder="0" />
-    <button id="cleanButton">Limpiar</button>
-    <form>
-      <select name="opcionesDeBusqueda" id="opcionesDeBusqueda">
-        <option value="nombre">Nombre</option>
-        <option value="plu">Plu</option>
-      </select>
-    </form>
-    <div id="searchContainer">
-      <input type="text" name="searchBar" id="searchBar" placeholder="Buscar producto por..." />
-      <button id="cleanSearchBar">X</button>
-    </div>
-    <ul id="itemsList"></ul>
-  </div>
-  <!-- Compiled and minified JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
-    onreadystatechange="if (this.readyState === 'complete') this.onload()">
-    </script>
-  <!-- <script src="main.js"></script> -->
-</body>
+		<div class="container">
+			<h1>Inventario</h1>
+			<!-- <button id="signin-button" onclick="handleSignInClick()">Sign in</button> -->
+			<button id="addButton">Entrada</button>
+			<button id="removeButton">Salida</button>
+			<h1>
+				Artículo seleccionado:
+			</h1>
+			<div id="productoSeleccionado">
+				<div class="primerItem">
+					<h2 class="no-seleccionable">
+						.
+					</h2>
+					<p class="no-seleccionable">
+						.
+					</p>
+				</div>
+			</div>
+			<input
+				type="number"
+				name="cantidadIngresada"
+				id="cantidadIngresada"
+				placeholder="0"
+			/>
+			<button id="cleanButton">Limpiar</button>
+
+			
+
+			<!-- <form>
+				<select name="opcionesDeBusqueda" id="opcionesDeBusqueda">
+					<option value="nombre">Nombre</option>
+					<option value="plu">Plu</option>
+				</select>
+			</form> -->
+			<!-- <div id="searchContainer">
+				<input
+					type="text"
+					name="searchBar"
+					id="searchBar"
+					placeholder="Buscar producto por..."
+				/>
+				<button id="cleanSearchBar">X</button>
+			</div> -->
+
+			<ul id="itemsList"></ul>
+		</div>
+		<!-- Compiled and minified JavaScript -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+		<script src="main.js"></script>
+		<script
+			async
+			defer
+			src="https://apis.google.com/js/api.js"
+			onload="this.onload=function(){};handleClientLoad()"
+			onreadystatechange="if (this.readyState === 'complete') this.onload()"
+		></script>
+	</body>
 </html>
