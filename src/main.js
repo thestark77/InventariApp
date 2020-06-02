@@ -1,13 +1,14 @@
 /*====================================================================================================
                                   IMPORTS
 ======================================================================================================*/
-import './main.scss';
-import {router} from './router/index.routes';
+//import './main.scss';
+//import {router} from './router/index.routes';
 
 
 window.addEventListener('hashchange', () => {
   router(window.location.hash);
 });
+
 
 
 
@@ -34,6 +35,7 @@ const hacerSalida = 'Salidas!B6';
 let usuarioEditor = "Username"; //TODO: asignar campo de texto importado desde el log in... cuando lo haga :v ¿Constante o variable?... creo que constante
 let Items;
 let productoSeleccionado = null;
+let auth;
 
 
 async function readApiCall() {
@@ -109,8 +111,10 @@ function initClient() {
 }
 
 function handleClientLoad() {
-  gapi.load('client:auth2', initClient);
+  //I dont want you delete this
+  auth = gapi.load('client:auth2', initClient);
 }
+window.handleClientLoad = handleClientLoad;
 
 function updateSignInStatus(isSignedIn) {
   readApiCall();
@@ -175,6 +179,8 @@ function seleccionarProducto(plu, nombre) {
     limpiarCantidadDigitada();
   }
 }
+
+window.seleccionarProducto = seleccionarProducto;
 
 function actualizarSeleccionado(producto) {
   const htmlString = `
