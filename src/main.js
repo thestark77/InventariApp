@@ -1,9 +1,22 @@
-import './main.scss'
+import './main.scss';
+import { router } from './router/index.routes';
 
 $(document).ready(function () {
 	$('select').formSelect();
 });
 
+$(document).ready(function () {
+	$('.sidenav').sidenav();
+});
+
+$(document).ready(function () {
+	$('.fixed-action-btn').floatingActionButton();
+});
+
+router(window.location.hash);
+window.addEventListener('hashchange', () => {
+	router(window.location.hash);
+});
 
 function readApiCall() {
 	var params = {
@@ -82,6 +95,8 @@ function initClient() {
 function handleClientLoad() {
 	gapi.load('client:auth2', initClient);
 }
+
+window.handleClientLoad = handleClientLoad;
 
 function updateSignInStatus(isSignedIn) {
 	if (isSignedIn) {
