@@ -24,15 +24,9 @@
 		<!-- <link rel="stylesheet" href="main.css" /> -->
 	</head>
 	<body>
+		<!-- Nav bar -->
 		<nav>
 			<div class="nav-wrapper">
-				<div class="input-field">
-						<input id="search" type="search" required />
-						<label class="label-icon" for="search"
-							><i class="material-icons">search</i></label
-						>
-						<i class="material-icons">close</i>
-					</div>
 				<a href="#" data-target="mobile-demo" class="sidenav-trigger"
 					><i class="material-icons">menu</i></a
 				>
@@ -58,19 +52,14 @@
 							src="https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png"
 					/></a>
 					<a href="#"><span class="white-text name">John Doe</span></a>
-					<a href="#"
-						><span class="white-text email">jdandturk@gmail.com</span></a
-					>
+					<a href="#"><span class="white-text email">jdandturk@gmail.com</span></a>
 				</div>
 			</li>
 			<li class="active"><a href="#/entradas">Entradas</a></li>
 			<li><a href="#/salidas">Salidas</a></li>
 			<li><a href="#/movimientos">Movimientos</a></li>
 			<li>
-				<a
-					id="signout-button"
-					onclick="handleSignOutClick()"
-					class="waves-effect waves-light btn"
+				<a id="signout-button" class="waves-effect waves-light btn"
 					><i class="material-icons left">person_outline</i>Cerrar sesión</a
 				>
 			</li>
@@ -78,26 +67,68 @@
 
 		<div class="input-field col s12">
 			<select name="opcionesDeBusqueda" id="opcionesDeBusqueda">
-				<option value="nombre">Todo</option>
+				<option value="todo">Todo</option>
 				<option value="nombre">Nombre</option>
 				<option value="plu">Plu</option>
 			</select>
 		</div>
 
-		<a
-			id="signin-button"
-			onclick="handleSignInClick()"
-			class="waves-effect waves-light btn"
+		<!-- Buscador -->
+		<nav>
+			<div class="nav-wrapper">
+				<form>
+					<div class="input-field">
+						<input
+							id="search"
+							name="search"
+							type="search"
+							placeholder="Buscar por..."
+						/>
+						<label class="label-icon" for="search"
+							><i class="material-icons">search</i></label
+						>
+						<i id="cleanSearchBar" class="material-icons">close</i>
+					</div>
+				</form>
+			</div>
+		</nav>
+		<a id="signin-button" class="waves-effect waves-light btn"
 			><i class="material-icons left">people</i>Iniciar sesión</a
 		>
 
-		<a id="entrada" onclick="updateApiCall()" class="waves-effect waves-light btn"
+		<a id="addButton" class="waves-effect waves-light btn"
 			><i class="material-icons left">library_add</i>Ingreso</a
 		>
-		<!-- TODO: -->
+		<a id="removeButton" class="waves-effect waves-light btn"
+			><i class="material-icons left">library_add</i>Salida</a
+		>
 
-		<div id="container">
+		<div id="container" class="container">
+			<h5 id="titulo">Entrada</h5>
 
+			<div id="productoSeleccionado">
+				<div class="primerItem">
+					<h2 class="no-seleccionable">
+						.
+					</h2>
+					<p class="no-seleccionable">
+						.
+					</p>
+				</div>
+			</div>
+
+			<h5 id="campoCantidad">Cantidad a ingresar</h5>
+
+			<input
+				type="number"
+				name="cantidadIngresada"
+				id="cantidadIngresada"
+				placeholder="0"
+			/>
+			<button id="cleanButton">Limpiar</button>
+			<!-- TODO: -->
+
+			<ul id="itemsList"></ul>
 		</div>
 
 		<div class="fixed-action-btn">
@@ -113,13 +144,13 @@
 		></script>
 		<!-- Compiled and minified Materialize-CSS JavaScript -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-		<!-- <script src="bundle.js"></script> -->
-		<script
+		<!-- <script src="main.js"></script> -->
+		<!-- <script
 			async
 			defer
 			src="https://apis.google.com/js/api.js"
 			onload="this.onload=function(){};handleClientLoad()"
 			onreadystatechange="if (this.readyState === 'complete') this.onload()"
-		></script>
+		></script> -->
 	</body>
 </html>

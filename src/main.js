@@ -1,6 +1,46 @@
+/*= ===================================================================================================
+								IMPORTS
+====================================================================================================== */
+const info = `<script
+			src="https://apis.google.com/js/api.js"
+			onload="handleClientLoad()"></script>`;
+document.write(info);
+
 import './main.scss';
 import { router } from './router/index.routes';
+import { funciones } from './controllers/funciones';
+/*= ===================================================================================================
+                                ELEMENTOS HTML
+====================================================================================================== */
+const search = document.getElementById('search'); //TODO: poner dentro de htmElements
+const opcionesDeBusqueda = document.getElementById('opcionesDeBusqueda');
+const addButton = document.getElementById('addButton');
+const removeButton = document.getElementById('removeButton');
+const cleanButton = document.getElementById('cleanButton');
+const cleanSearchBar = document.getElementById('cleanSearchBar');
+const signInButton = document.getElementById('signin-button');
+const signOutButton = document.getElementById('signout-button');
+const itemsList = document.getElementById('itemsList');
+const cantidadIngresada = document.getElementById('cantidadIngresada');
+const divProductoSeleccionado = document.getElementById('productoSeleccionado');
+window.handleClientLoad = handleClientLoad;
+window.seleccionarProducto = seleccionarProducto;
 
+let usuarioEditor;
+
+const htlmElements = {
+	search: search,
+	opcionesDeBusqueda: opcionesDeBusqueda,
+	itemsList: itemsList,
+	cantidadIngresada: cantidadIngresada,
+	divProductoSeleccionado: divProductoSeleccionado
+};
+
+export { htlmElements };
+
+/*= ===================================================================================================
+                                        EVENTOS
+====================================================================================================== */
 $(document).ready(function () {
 	$('select').formSelect();
 });
@@ -13,66 +53,58 @@ $(document).ready(function () {
 	$('.fixed-action-btn').floatingActionButton();
 });
 
-router(window.location.hash);
-window.addEventListener('hashchange', () => {
-	router(window.location.hash);
+opcionesDeBusqueda.addEventListener('change', () => {
+	funciones.filtroCambiado();
 });
 
-function readApiCall() {
-	var params = {
-		spreadsheetId: '10jQrnFy8W7FkIpM1AGGsRTqRfC7odE_9xI8bmwpeRKM',
-		range: 'B3:C7',
-		valueRenderOption: 'FORMATTED_VALUE',
-	};
+search.addEventListener('keyup', (e) => {
+	funciones.filtrar(e);
+});
 
-	var request = gapi.client.sheets.spreadsheets.values.get(params);
-	request.then(
-		function (response) {
-			// TODO: Change code below to process the `response` object:
-			console.log(response.result);
-		},
-		function (reason) {
-			console.error('error: ' + reason.result.error.message);
-		}
-	);
-}
+addButton.addEventListener('click', () => {
+	if (usuarioEditor !== undefined) {
+		funciones.movimiento(funciones.hacerIngreso, usuarioEditor.Sf.Ut.Eu);
+	} else {
+		console.log('Primero debe iniciar sesión'); // TODO: convertir en ventana modal
+	}
+});
 
-function updateApiCall() {
-	var params = {
-		spreadsheetId: '10jQrnFy8W7FkIpM1AGGsRTqRfC7odE_9xI8bmwpeRKM',
-		range: 'Entradas!B6',
-		valueInputOption: 'USER_ENTERED',
-		insertDataOption: 'INSERT_ROWS',
-	};
+removeButton.addEventListener('click', () => {
+	if (usuarioEditor !== undefined) {
+		funciones.movimiento(funciones.hacerSalida, usuarioEditor.Sf.Ut.Eu);
+	}else{
+		console.log('Primero debe iniciar sesión'); // TODO: convertir en ventana modal
+	}	
+});
 
-	var valueRangeBody = {
-		values: [
-			[
-				'usuarioEditor',
-				'productoSeleccionado[0]',
-				'productoSeleccionado[1]',
-				'cantidadArticulo',
-				'hora',
-			],
-		],
-	};
+signInButton.addEventListener('click', () => {
+	handleSignInClick();
+});
 
-	var request = gapi.client.sheets.spreadsheets.values.append(
-		params,
-		valueRangeBody
-	);
-	request.then(
-		function (response) {
-			// TODO: Change code below to process the `response` object:
-			console.log(response.result);
-		},
-		function (reason) {
-			console.error('error: ' + reason.result.error.message);
-		}
-	);
-}
+signOutButton.addEventListener('click', () => {
+	handleSignOutClick();
+});
 
-function initClient() {
+cleanButton.addEventListener('click', () => {
+	funciones.limpiar();
+});
+
+cleanSearchBar.addEventListener('click', () => {
+	if (search !== '') {
+		funciones.limpiarBarraBusqueda();
+		funciones.displayItems();
+	}
+});
+
+/* router(window.location.hash); //TODO:
+window.addEventListener('hashchange', () => {
+	router(window.location.hash);
+}); */
+
+/*= ===================================================================================================
+                            API
+====================================================================================================== */
+const initClient = () => {
 	var API_KEY = 'AIzaSyAsP0ndw71kxf6olT7Pc-UVJv11MR8t6pc';
 
 	var CLIENT_ID =
@@ -90,24 +122,32 @@ function initClient() {
 			gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus);
 			updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
 		});
-}
+};
 
 function handleClientLoad() {
 	gapi.load('client:auth2', initClient);
 }
 
-window.handleClientLoad = handleClientLoad;
-
-function updateSignInStatus(isSignedIn) {
+const updateSignInStatus = (isSignedIn) => {
 	if (isSignedIn) {
-		readApiCall();
+		funciones.read();
 	}
-}
+};
 
-function handleSignInClick(event) {
-	gapi.auth2.getAuthInstance().signIn();
-}
+const handleSignInClick = () => {
+	usuarioEditor = gapi.auth2.getAuthInstance().signIn();
+	//console.log(usuarioEditor);
+};
 
-function handleSignOutClick(event) {
+/* function show(){
+	console.log(usuarioEditor.Sf.Ut.Eu);
+}
+window.show = show; */
+
+const handleSignOutClick = () => {
 	gapi.auth2.getAuthInstance().signOut();
+};
+
+function seleccionarProducto(plu, nombre) {
+	funciones.seleccionarProducto(plu, nombre);
 }
